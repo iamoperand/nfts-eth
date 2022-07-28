@@ -18,6 +18,8 @@ const METADATA_TEMPLATE = {
     ],
 }
 
+const FUND_AMOUNT = (10e18).toString() // 10 LINK
+
 module.exports = async function ({ getNamedAccounts, deployments }) {
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
@@ -36,9 +38,10 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
 
-        const tx = await vrfCoordinatorV2Mock.createSubscription()
-        const txReceipt = await tx.wait(1)
-        subscriptionId = txReceipt.events[0].args.subId
+        const transactionResponse = await vrfCoordinatorV2Mock.createSubscription()
+        const transactionReceipt = await transactionResponse.wait(1)
+        subscriptionId = transactionReceipt.events[0].args.subId
+        await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, FUND_AMOUNT)
     } else {
         vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2
         subscriptionId = networkConfig[chainId].subscriptionId
@@ -57,7 +60,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         mintFee,
     ]
 
-    const randomIpfsNFT = await deploy("RandomIpfsNFT", {
+    const randomIpfsNft = await deploy("RandomIpfsNft", {
         from: deployer,
         args,
         log: true,
@@ -67,7 +70,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
 
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying...")
-        await verify(randomIpfsNFT.address, args)
+        await verify(randomIpfsNft.address, args)
     }
 }
 
@@ -95,4 +98,4 @@ async function handleTokenUris() {
     return tokenUris
 }
 
-module.exports.tags = ["all", "randomipfs", "main"]
+module.exports.tags = ["all", "randomipfsnft", "main"]
