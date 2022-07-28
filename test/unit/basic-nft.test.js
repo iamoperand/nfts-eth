@@ -4,14 +4,14 @@ const { developmentChains } = require("../../helper-hardhat-config")
 
 !developmentChains.includes(network.name)
     ? describe.skip
-    : describe("BasicNFT Unit Tests", async function () {
+    : describe("BasicNft Unit Tests", async function () {
           let basicNft, deployer
 
           beforeEach(async () => {
               accounts = await ethers.getSigners()
               deployer = accounts[0]
               await deployments.fixture(["mocks", "basicnft"])
-              basicNft = await ethers.getContract("BasicNFT")
+              basicNft = await ethers.getContract("BasicNft")
           })
 
           it("Allows users to mint an NFT, and updates appropriately", async function () {
