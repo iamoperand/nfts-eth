@@ -38,3 +38,5 @@ module.exports = async function ({ getNamedAccounts }) {
     await dynamicSvgNftTx.wait(1)
     console.log(`DynamicSvgNft index: 0 has tokenURI: ${await dynamicSvgNft.tokenURI(0)}`)
 }
+
+module.exports.tags = ["all", "mint"]
