@@ -39,7 +39,7 @@ const HIGH_TOKEN_URI =
 
           describe("mintNft", () => {
               it("Emits an event and mints the NFT", async function () {
-                  const highValue = ethers.utils.parseEther("1000") // $1 / ether
+                  const highValue = ethers.utils.parseEther("1000") // $1/eth
 
                   await expect(dynamicSvgNft.mintNft(highValue)).to.emit(
                       dynamicSvgNft,
